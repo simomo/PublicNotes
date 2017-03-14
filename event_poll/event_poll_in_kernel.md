@@ -1,5 +1,5 @@
 # Epoll Code Demo
-```
+```c
 struct epoll_event ev, events[MAX_EVENTS];
 int efd = epoll_create(1024);
 
