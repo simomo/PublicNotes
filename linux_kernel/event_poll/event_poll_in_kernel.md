@@ -36,6 +36,8 @@ We get a new incoming connection, then give it to epoll to handle incoming data 
 ### Three key functions
 I emphasize three verb in above titles, they represent three functions: `epoll_create`, `epoll_ctl`, `epoll_wait`.
 
+`epoll_create` will call syscall `epoll_create` or `epoll_create1`.
+
 # Kernel level
 
 ## Data Structures
@@ -93,4 +95,34 @@ struct eventpoll {
 	struct list_head visited_list_link;
 };
 ```
-## `epoll_create`
+## `epoll_create` & `epoll_create1` syscall
+### `epoll_create`
+`epoll_create` syscall accept a parameter, size of ??????, but this parameter is useless actually, `epoll_create` will ignore this parameter, and call `epoll_create1`.
+
+### `epoll_create1`
+The real implementation of epoll_create, it will do:
+#### allocate memory for a `struct eventpoll`
+ ```c
+ struct eventpoll *ep = NULL;
+/*
+ * Create the internal data structure ("struct eventpoll").
+ */
+error = ep_alloc(&ep);
+if (error < 0)
+	return error;
+ ```
+> C language tips:
+> The codes above show us how to alloc memory for a pointer, pointing to a complex struct.
+
+ep_alloc will:
+ - init spin lock, `lock`
+ - init mutex lock, `mtx`
+ - init wait queue head, `wq` and `poll_wait`
+ - init list head, `rdllist`
+ - set `user` to current user
+ - etc.
+
+> TODO:  
+> [ ] sched/waitqueue.md  
+> [ ] synchronize_infrastructure/mutex.md  
+> [ ] synchronize_infrastructure/spin_lock.md
