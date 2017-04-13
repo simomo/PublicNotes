@@ -1,17 +1,26 @@
 # How to use docker to build a comfortable env for both dev & production
 
 ## The definition of "comfortable"
+
 ### No needs to deploy app env repeatly in dev and production env
+
 I only need to take care of my code, my local dev env, and dockerfile, then production env can be generated easily.
+
 ### Local dev is fast & flexible
+
 I want the process of "changing code -> refreshing -> show me the result" is fast, building image each time is unacceptable.
 I can use any IDE/editor I like to develop, no limits.
+
 ### Involving CI system easily
+
 Spur don't have QEs, so I will involve CI into its development process in (near) future, so it must be friendly for CI vendors.
+
 ## Basic idea
+
 Three container, one for static files of the spur client (based on nginx), one for the spur server (based on python), the last one is for the DB (MySQL)
 
-*Illustration*
+### Illustration
+
 ```
 +----------------------------------------------------------+
 |Your host (Windows 7)                                     |
