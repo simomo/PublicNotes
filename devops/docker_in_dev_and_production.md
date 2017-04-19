@@ -80,3 +80,71 @@ Please download installer from this [link](https://www.docker.com/products/docke
 
 ### Config the `Shared Folder` between host OS and VM
 **Why do we need a `Shared Folder`?**
+
+## Step X-1: Build the image
+
+### Dockerfiles
+
+Django's official repo in dockerhub provided a sample, I modified it to this
+(Postgresql -> mysql).
+```dockerfile
+FROM python:2.7.13
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        mysql-client \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /usr/src/app
+COPY ./requirements.txt ./
+RUN pip install -r requirements.txt
+COPY . .
+
+// TODO: Check if manage.py exist
+
+EXPOSE 8000
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+```
+
+### Build the image
+
+```bash
+docker build -f /path/to/dockerfile
+```
+
+### Name our image
+
+If the output of `docker images` is like this:
+```
+REPOSITORY          TAG                 IMAGE ID            CREATED
+SIZE
+<none>              <none>              7ed866a56f2b        5 days ago
+750 MB
+```
+We can name it by
+```shell
+docker tag spur_api_server:0.1
+```
+Now, `<none>`s are replaced with meaningful words
+```
+REPOSITORY          TAG                 IMAGE ID            CREATED
+SIZE
+spur_api_server     0.1                 7ed866a56f2b        5 days ago
+750 MB
+```
+
+### A little problem
+A problem here is it assume I already had a constructed django project, but I don't have one, so let us create it.
+
+```shell
+docker run -v /spur_server:/usr/src/app -it spur_api_server:0.1 bash
+```
+
+
+## Step X: run the image
+
+At next step, we build our image from the dockerfile.
+
+
+
+### Run your image
