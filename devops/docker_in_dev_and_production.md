@@ -137,7 +137,8 @@ spur_api_server     0.1                 7ed866a56f2b        5 days ago
 A problem here is it assume I already had a constructed django project, but I don't have one, so let us create it.
 
 ```shell
-docker run -v /spur_server:/usr/src/app -it spur_api_server:0.1 bash
+host$ docker run -v /spur_server:/usr/src/app -it spur_api_server:0.1 bash
+docker$ django-admin startproject spur_api /usr/src/app
 ```
 
 
