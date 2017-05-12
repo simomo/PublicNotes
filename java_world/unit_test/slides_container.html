@@ -14,23 +14,155 @@
         font-weight: normal;
       }
       .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+
+
+
+
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif);
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body {
+        font-family: 'Droid Serif';
+      }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: 400;
+        margin-bottom: 0;
+      }
+      .remark-slide-content h1 { font-size: 3em; }
+      .remark-slide-content h2 { font-size: 2em; }
+      .remark-slide-content h3 { font-size: 1.6em; }
+      .footnote {
+        position: absolute;
+        bottom: 3em;
+      }
+      li p { line-height: 1.25em; }
+      .red { color: #fa0000; }
+      .large { font-size: 2em; }
+      a, a > code {
+        color: rgb(249, 38, 114);
+        text-decoration: none;
+      }
+      code {
+        background: #e7e8e2;
+        border-radius: 5px;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+      .remark-code-line-highlighted     { background-color: #373832; }
+      .pull-left {
+        float: left;
+        width: 47%;
+      }
+      .pull-right {
+        float: right;
+        width: 47%;
+      }
+      .pull-right ~ p {
+        clear: both;
+      }
+      #slideshow .slide .content code {
+        font-size: 0.8em;
+      }
+      #slideshow .slide .content pre code {
+        font-size: 0.9em;
+        padding: 15px;
+      }
+      .inverse {
+        background: #272822;
+        /*color: #777872;*/
+        color: #f3f3f3;
+        /*text-shadow: 0 0 20px #333;*/
+      }
+      .inverse h1, .inverse h2 {
+        color: #f3f3f3;
+        line-height: 0.8em;
+      }
+
+      /* Slide-specific styling */
+      #slide-inverse .footnote {
+        bottom: 12px;
+        left: 20px;
+      }
+      #slide-how .slides {
+        font-size: 0.9em;
+        position: absolute;
+        top:  151px;
+        right: 140px;
+      }
+      #slide-how .slides h3 {
+        margin-top: 0.2em;
+      }
+      #slide-how .slides .first, #slide-how .slides .second {
+        padding: 1px 20px;
+        height: 90px;
+        width: 120px;
+        -moz-box-shadow: 0 0 10px #777;
+        -webkit-box-shadow: 0 0 10px #777;
+        box-shadow: 0 0 10px #777;
+      }
+      #slide-how .slides .first {
+        background: #fff;
+        position: absolute;
+        top: 20%;
+        left: 20%;
+        z-index: 1;
+      }
+      #slide-how .slides .second {
+        position: relative;
+        background: #fff;
+        z-index: 0;
+      }
+
+      /* Two-column layout */
+      .left-column {
+        color: #777;
+        width: 20%;
+        height: 92%;
+        float: left;
+      }
+        .left-column h2:last-of-type, .left-column h3:last-child {
+          color: #000;
+        }
+      .right-column {
+        width: 75%;
+        float: right;
+        padding-top: 1em;
+      }
+
+
+
     </style>
   </head>
   <body>
     <textarea id="source">
+name: inverse
+<!--layout: true-->
+class: inverse
 
+---
 class: center, middle
 
 # 单元测试简介
+### [unit test]
+---
+
+# About Me
+## 7年Python经验
+## 写过一点JavaScript，C
+## 11个月的Java经验
+
 
 ---
+
+class: middle
 
 # Agenda
 
 1. 什么是单元测试
 2. 为什么要单元测试
-3. 怎么单元测试
-4. TDD
+3. 怎么做单元测试
+4. TDD 测试驱动开发
 
 ---
 
@@ -53,13 +185,13 @@ class: center, middle
 
 ---
 
-## 我的最开始的认识：大家都在写单元测试
+### 最近几年开源软件都在追求代码覆盖率
 
-最近几年开源软件都在这么干，都在追求代码覆盖率，那我也得这么干
+<img src="opensource_test_coverage.png" width="720" />
 
 ---
 
-## 货柜崇拜
+## 题外话：拒绝货柜崇拜
 
 第二次世界大战太平洋战争时，美军于塔纳岛建立一临时基地。当时岛上的原住民看见美军于“大铁船”（军舰）内出来，皆觉得十分惊讶；他们也看到，有一些“大铁鸟”（军用飞机）运送穿着美军军服的人及许多物资。这些原住民看见这种情况均感到很惊讶，并觉得这些“大铁船”及“大铁鸟”十分厉害。加上美军也提供部分物资给原住民，而这些物资对原住民来说十分有用，结果这些原住民将美军当作神。  
 
@@ -69,7 +201,25 @@ class: center, middle
 
 class: center, middle
 
-## 深层次原因
+## 他们这么做的原因是？
+
+---
+
+class: center, middle
+
+### 低成本验证代码实现，减少bug
+
+---
+
+class: center, middle
+
+### 方便自动化，为持续集成提供基础
+
+---
+
+class: center, middle
+
+### 给了我们   ***随意***   重构代码的勇气
 
 ---
 
@@ -77,23 +227,29 @@ class: center, middle
 
 如果你希望自己的软件灵活可变，那就应该时常修改它；
 
-要想证明软件易于修改，唯一办法就是做些实际的修改；
-
----
-
-class: middle
-
 该在什么时候做这些修改呢？随时！关注哪个模块，就对它做点简单的修改来改进结构。每次通读代码的时候，也可以不时调整一下结构。
 
-***这完全与大多数人对软件的理解相反。他们认为对上线运行的软件不断地做修改是危险的。错！让软件保持固定不变才是危险的！如果一直不重构代码，等到最后不得不重构时，你就会发现代码已经“僵化了”。***
+---
+
+class: center, middle
+
+这完全与大多数人对软件的理解相反。
+
+他们认为对上线运行的软件不断地做修改是危险的。
+
+***错！***
+
+让软件保持固定不变才是危险的！
+
+如果一直不重构代码，等到最后不得不重构时，你就会发现代码已经“僵化了”。
 
 ---
 
 class: middle
 
-为什么大多数开发人员不敢不断修改他的代码呢？因为他们害怕会改坏代码！为什么会有这样的担心呢？因为他们没做过测试.
+为什么大多数开发人员不敢经常修改他的代码呢？因为他们害怕会改坏代码！为什么会有这样的担心呢？因为他们没有做测试.
 
-话题又回到测试上来了。***如果你有一套覆盖了全部代码的自动化测试，如果那套测试可以随时快速执行，那么你根本不会害怕修改代码。***怎样才能证明你不怕修改代码呢？那就是，你一直在改。
+话题又回到测试上来了。***如果你有一套覆盖了全部代码的自动化测试，如果那套测试可以随时快速执行，那么你根本不会害怕修改代码。***
 
 ---
 
@@ -107,7 +263,7 @@ class: middle
 
 class: middle
 
-拥有一套值得信赖的测试，便可完全打消对修改代码的全部恐惧，当看见糟糕代码的时候，就可以放手整理，代码变得具有可塑性。
+拥有一套***值得信赖的测试***，便可完全打消对修改代码的全部恐惧，当看见糟糕代码的时候，就可以放手整理，代码变得具有可塑性。
 
 当程序员不再惧怕整理代码时，他们便会动手整理！整洁的代码更易于理解，更易于修改，也更易于扩展。代码简洁了，缺陷也更少了。
 
@@ -115,11 +271,19 @@ class: middle
 
 class: center, middle
 
-# 怎么单元测试
+# 怎么做单元测试
 
 ---
 
-## 最基本的场景
+class: center, middle
+
+## Arrange 安排
+
+## Act 干！
+
+## Assert 检查
+
+---
 
 ```java
 public class Math {
@@ -142,30 +306,200 @@ public class MathTest {
     Math math;
     @Before
     public void setUp() throws Exception {
-        math = new Math(7, 10);
+        math = new Math(7, 10);  // <----------- Arrange
     }
     @Test
     public void testAdd() {
-        Assert.assertEquals(17, math.add());
+        Assert.assertEquals(17, math.add());  // <----------- Act & Assert
     }
 }
 ```
 
 ---
 
-## 实际的场景
+class: center, middle
+
+## 要测试各种情况
+
+http://172.16.2.73:8081/#/c/9273/1
+
+---
+
+class: middle
+
+## 想不全怎么办？
+
+
+首先：尽量想；
+
+其次：No one is perfect，等出问题了，补上对应的情况即可。
+
+---
+
+class: center, middle
+
+### 我的code要用数据库/Redis/另一个服务怎么办？
+
+# Mock
+
+---
+## 使用JMockit来mock外界依赖
 
 ```java
+public class ExampleTest {
+   @Tested ServiceAbc tested;
+   @Injectable DependencyXyz mockXyz;
 
+   @Test
+   public void doOperationAbc(@Mocked AnotherDependency anyInstance) {
+      new Expectations() {{
+         anyInstance.doSomething(anyString); result = 123;
+         AnotherDependency.someStaticMethod(); result = new IOException();
+      }};
+
+      tested.doOperationAbc("some data");
+
+      new Verifications() {{ mockXyz.complexOperation(true, anyInt, null); times = 1; }};
+   }
+}
+```
+
+<!--instanceServiceTest2-->
+
+---
+
+class: center, middle
+
+## 其他mock的小技巧
+
+---
+
+***我想测private方法怎么办？***
+
+```java
+Method method = CommonDataJob.class.getDeclaredMethod("parseTableFilterCondition", String.class);
+method.setAccessible(true);
+
+List<String> r1 = (List<String>) method.invoke(commonDataJob, "all");
+Assert.assertEquals(r1.size(), 0);
+```
+
+---
+
+***有个超复杂的private方法，我好不容易测好了。测它的调用者的时候，我想mock掉它，怎么办？***
+
+```java
+public class CommonDataJobTest {
+    @Tested(fullyInitialized = true)
+    private CommonDataJob commonDataJob;
+    @Test
+	public void executeTest1(@Mocked JobExecutionContext jobExecutionContext) throws JobExecutionException {
+        new MockUp<CommonDataJob> () {
+            @Mock void syncDataComplexMode(List<InterfaceDo> dos) {}
+        };
+        new Expectations() {{
+            jobExecutionContext.getJobDetail();
+            JobDetail jobDetail = new JobDetailImpl();
+            JobDataMap jobDataMap = jobDetail.getJobDataMap();
+            jobDataMap.put("filterMode", JobFactory.JobMode.COMPLEX.getValue());
+            result = jobDetail;
+            times = 1;
+        }};
+        commonDataJob.execute(jobExecutionContext);
+    }
+}
+```
+
+---
+
+***如何验证方法调用的参数***
+
+```java
+@Test
+public void parseNodeFilterConditionTest2() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    new Expectations() {{
+        interfaceDoMapper.selectByExample((InterfaceDoExample) any);
+        result = Arrays.asList(new InterfaceDo(), new InterfaceDo());
+        times = 1;
+    }};
+
+    Method method = CommonDataJob.class.getDeclaredMethod("parseNodeFilterCondition", String.class);
+    method.setAccessible(true);
+
+    List<InterfaceDo> r1 = (List<InterfaceDo>) method.invoke(commonDataJob, "enabled");
+    Assert.assertEquals(r1.size(), 2);
+
+    new Verifications() {{
+        InterfaceDoExample interfaceDoExample;
+        interfaceDoMapper.selectByExample(interfaceDoExample = withCapture());
+        // verify interfaceDoExample, e.g. Assert
+    }};
+}
 ```
 
 ---
 
 class: center, middle
 
-# TDD
+## 没错，几乎工程中的所有角落都可以测到
+## :)
 
 ---
+
+class: center, middle
+
+## 但是
+# 请编写易于测试的代码
+---
+
+class: center, middle
+
+***No Zuo No Die, Why You Try***
+
+![nozuonodie](nozuonodiewhy.jpg)
+
+---
+
+class: center, middle
+
+## 5000 >> 100 * 50
+
+---
+
+class: center, middle
+
+# TDD 测试驱动开发
+## 进攻是最好的防御
+
+---
+## 三准则
+
+#### 1. 在编写失败的单元测试之前，不要编写任何产品代码。
+#### 2. 只要有一个能***失败***的单元测试，就不要再写测试代码；编译不通过也算。
+#### 3. 产品代码恰好能够让当前的单元测试成功通过即可，不要多写。
+
+***遵循这三项准则的话，大概每30s就要运行一次代码***
+
+---
+
+class: center, middle
+
+## 先写实现后测试是防御
+
+---
+
+class: center, middle
+
+## 先写测试后写实现是进攻
+
+---
+
+class: middle
+
+## 听说TDD已经不流行了，TDD已死？
+
+#### TDD不是银弹，不可能适合所有的场景，但这不应该成为我们拒绝它的理由。
+#### 也不要轻易否定TDD，如果要否定，起码要在认真实践过之后。
 
 ---
 
@@ -177,8 +511,23 @@ class: center, middle
 
 class: center, middle
 
+## 有人说
+# “互联网公司都这样......”
+
+---
+
+class: center, middle
+
 ### “做人如果没有梦想，和咸鱼有什么区别”
 ![dream](dream.jpg)
+
+---
+
+class: center, middle
+
+# 谢谢大家
+# 周末愉快
+# :)
 
 
 
