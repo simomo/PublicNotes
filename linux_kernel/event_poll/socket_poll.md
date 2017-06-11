@@ -2,6 +2,8 @@
 
 ## sock_poll function
 
+`file_object.poll -> sock_poll -> proto_ops.poll -> inet_stream_ops.poll -> tcp_poll`
+
 ```c
 static unsigned int sock_poll(struct file *file, poll_table *wait)
 {

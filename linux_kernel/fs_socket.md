@@ -4,13 +4,13 @@
 
 ### File Descriptor
 
-A number, exposed in user space, represents a readable/writable "file object".
+A number, exposed to user space, represents a "pointer" or "reference" to one readable/writable "file object" in kernel.
 
 ### File Object
 
-The file object is used to represent a file opened by a process.
 It is a abstract of "something" which can act like a normal "file".
 
+The operations a file object should have:
 ```c
 struct file_operations {
         struct module *owner;
@@ -49,15 +49,17 @@ struct file_operations {
 
 ## socket
 
-### socket co-work with file system
+### How socket co-work with file system
 
-`syscall3(socket ...) : sock_map_fd(sock, flags & (O_CLOEXEC | O_NONBLOCK));`  
-            |  
-            V  
-`static int sock_map_fd(struct socket *sock, int flags) : sock_alloc_file(sock, flags, NULL);`  
-            |  
-            V  
+Alloc & init a file object when we are creating a socket in user apace.
+
 ```c
+// `syscall3(socket ...) : sock_map_fd(sock, flags & (O_CLOEXEC | O_NONBLOCK));`  
+            |  
+            V  
+// `static int sock_map_fd(struct socket *sock, int flags) : sock_alloc_file(sock, flags, NULL);`  
+            |  
+            V  
 struct file *sock_alloc_file(struct socket *sock, int flags, const char *dname)
 {
 	struct qstr name = { .name = "" };
@@ -97,6 +99,7 @@ EXPORT_SYMBOL(sock_alloc_file);
 
 ### socket file ops
 
+And make this file object's file_operations point ot socket's version, e.g. socket_file_ops
 ```c
 static const struct file_operations socket_file_ops = {
 	.owner =	THIS_MODULE,
