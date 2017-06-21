@@ -15,6 +15,16 @@ static unsigned int sock_poll(struct file *file, poll_table *wait)
 	 */
 	sock = file->private_data;
 
+    /*
+	 * whether this sock can busy loop depends on:
+	 *   1. enabled CONFIG_NET_RX_BUSY_POLL
+	 *   2. sock->sk->sk_ll_usec > 0
+	 *      - ? where are the codes decreasing this value?
+	 *      - evernote: "Busy polling with e1000 driver"
+	 *   3. sk_napi_id > 0 (evernote: "Busy polling with e1000 driver")
+	 *   4. no need to be sched
+	 *   5. no pending signal for `current`
+	 */
 	if (sk_can_busy_loop(sock->sk)) {
 		/* this socket can poll_ll so tell the system call */
 		busy_flag = POLL_BUSY_LOOP;
@@ -24,7 +34,7 @@ static unsigned int sock_poll(struct file *file, poll_table *wait)
 			sk_busy_loop(sock->sk, 1);
 	}
 
-	return busy_flag | sock->ops->poll(file, sock, wait);
+	return busy_flag | sock->ops->poll(file, sock, wait);  // <----- goes to tcp_poll, if it's a tcp socket
 }
 ```
 |  
